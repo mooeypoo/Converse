@@ -1,0 +1,12 @@
+.converse-ui-collectionWidget {
+  border: 1px solid #cccccc;
+  padding: 0.5em;
+}
+.converse-ui-collectionWidget .converse-ui-collectionWidget {
+  margin-left: 0.5em;
+  margin-top: 1em;
+}
+
+.converse-ui-postWidget {
+  padding: 0.3em;
+}

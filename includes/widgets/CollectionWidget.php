@@ -10,22 +10,30 @@ class CollectionWidget extends \OOUI\Widget {
 		// TODO: Add timestamp + author information
 		// TODO: Add moderation info + controls
 		// TODO: Add reply / add children
+		$groupDiv = new \OOUI\Tag();
+		$groupDiv->addClasses( array( 'converse-ui-collection-group' ) );
+
+		$headerDiv = new \OOUI\Tag();
+		$headerDiv->addClasses( array( 'converse-ui-collection-header' ) );
 
 		// Mixins
-		$this->mixin( new \OOUI\GroupElement( $this, array_merge( $config, array( 'group' => $this ) ) ) );
+		$this->mixin( new \OOUI\GroupElement( $this, array_merge( $config, array( 'group' => $groupDiv ) ) ) );
 
 		// Title post widget
 		if ( $model->getTitlePost() !== null ) {
 			$titleWidget = new PostWidget( $model->getTitlePost() );
 			$titleWidget->addClasses( array( 'converse-ui-collectionWidget-title' ) );
-			$this->appendContent( $titleWidget );
+			$headerDiv->appendContent( $titleWidget );
 		}
 
 		// Summary post widget
 		if ( $model->getSummaryPost() !== null ) {
 			$summaryPostWidget = new PostWidget( $model->getSummaryPost() );
 			$summaryPostWidget->addClasses( array( 'converse-ui-collectionWidget-summary' ) );
-			$this->appendContent( $summaryPostWidget );
+			$headerDiv->appendContent( $summaryPostWidget );
+		}
+		if ( $model->getTitlePost() !== null || $model->getSummaryPost() !== null ) {
+			$this->appendContent( $headerDiv );
 		}
 
 		// Primary post widget
@@ -45,11 +53,7 @@ class CollectionWidget extends \OOUI\Widget {
 		}
 		$this->addItems( $childWidgets );
 
-		// TODO: Create children by $model->getItems();
-		// if ( isset( $config['items'] ) ) {
-		// 	$this->addItems( $config['items'] );
-		// }
-
 		$this->addClasses( array( 'converse-ui-collectionWidget' ) );
+		$this->appendContent( $groupDiv );
 	}
 }

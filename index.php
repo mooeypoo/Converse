@@ -10,9 +10,8 @@ $classLoader->register();
 OOUI\Theme::setSingleton( new OOUI\ApexTheme() );
 OOUI\Element::setDefaultDir( 'ltr' );
 $styles = array(
-	'styles/ooui/oojs-ui-apex.css',
-	// 'styles/converse.css',
-	// 'styles/converse.PostWidget.css'
+	'includes/styles/ooui/oojs-ui-apex.css',
+	'includes/styles/Converse.css'
 );
 
 
@@ -39,11 +38,15 @@ echo "<h1>Converse</h1>";
 // $replyIdLevel1b = $dbhelper->addNewCollection( $topicId, 'This is reply #2 content' );
 // $replyIdLevel2a = $dbhelper->addNewCollection( $replyIdLevel1a, 'This is reply #1a1 content' );
 // $replyIdLevel2b = $dbhelper->addNewCollection( $replyIdLevel1a, 'This is reply #1a2 content' );
+// $topic2Id = $dbhelper->addNewCollection( $boardId, 'This is another topic content', 'This is another topic title', 'This is another optional description or summary' );
+// $replyIdTopic2 = $dbhelper->addNewCollection( $topic2Id, 'This is the content of the reply to another topic' );
 
+$boardId = 1;
 // Build a collection model
 $builder = new Converse\Model\ModelBuilder();
-$collection = $builder->populateCollection( 16 );
+$collection = $builder->populateCollection( $boardId );
+
+// var_dump($collection);
 
 $collectionWidget = new Converse\UI\CollectionWidget( $collection );
 echo $collectionWidget;
-// var_dump( $collection );

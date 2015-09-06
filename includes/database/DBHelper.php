@@ -32,7 +32,32 @@ class DBHelper {
 
 	public function getCollectionChildren( $id ) {
 		return $this->connection->fetchAll(
-			'SELECT * FROM collection_children WHERE collection_id=?',
+			'SELECT * FROM collection_children WHERE collection_id='.$id
+		);
+	}
+
+	/**
+	 * Get a collection from the database
+	 *
+	 * @param int $id Collection id
+	 * @return Array Collection data
+	 */
+	public function getPost( $id ) {
+		return $this->connection->fetchAssoc(
+			'SELECT * FROM posts WHERE id=?',
+			array( $id )
+		);
+	}
+
+	/**
+	 * Get a collection from the database
+	 *
+	 * @param int $id Collection id
+	 * @return Array Collection data
+	 */
+	public function getRevision( $id ) {
+		return $this->connection->fetchAssoc(
+			'SELECT * FROM revisions WHERE id=?',
 			array( $id )
 		);
 	}
@@ -95,7 +120,6 @@ class DBHelper {
 
 		// Add a revision
 		$revisionId = $this->addRawRevision( $data );
-
 		// Add a new post
 		$postId = $this->addRawPost( $revisionId );
 

@@ -22,13 +22,29 @@ class ModelBuilder {
 	 * @param int $collectionId Collection Id
 	 * @return Collection Collection model
 	 */
-	public function populateCollection( $collectionId ) {
+	public function populateCollection( $collectionId, $context = null ) {
 		$childrenArray = array();
 
 		// Get the collection data
 		$collectionData = $this->dbhelper->getCollection( $collectionId );
+
 		// Initialize model
 		$collection = new Collection( $collectionId, $collectionData );
+		if ( $context !== null ) {
+			$collection->setContextCollection( $context );
+		}
+
+		// Translate data into models
+		if ( isset( $collectionData['title_post'] ) ) {
+			$collection->setTitlePost( $this->populatePost( $collectionData['title_post'], $collection ) );
+		}
+		if ( isset( $collectionData['primary_post'] ) ) {
+			$collection->setPrimaryPost( $this->populatePost( $collectionData['primary_post'], $collection ) );
+		}
+		if ( isset( $collectionData['summary_post'] ) ) {
+			$collection->setSummaryPost( $this->populatePost( $collectionData['summary_post'], $collection ) );
+		}
+
 		// Get children
 		$children = $this->dbhelper->getCollectionChildren( $collectionId );
 
@@ -46,5 +62,32 @@ class ModelBuilder {
 
 		$collection->addItems( $childrenArray );
 		return $collection;
+	}
+
+	/**
+	 * Populate a post model with its revision based
+	 * on the post id.
+	 *
+	 * @param [type] $postId [description]
+	 * @return Post Post model
+	 */
+	public function populatePost( $postId, $ownerCollection ) {
+		// Get post data
+		$postData = $this->dbhelper->getPost( $postId );
+
+		// Get latest revision
+		$latestRevId = $postData['latest_revision'];
+		$revisionData = $this->dbhelper->getRevision( $latestRevId );
+
+		// Create revision model
+		$revision = new Revision( $latestRevId, $revisionData );
+
+		// Create post model
+		$post = new Post( $postId, $ownerCollection, $revision, $postData );
+
+		// Attach revision to post
+		$revision->setParentPost( $post );
+
+		return $post;
 	}
 }

@@ -10,23 +10,21 @@ class Revision extends ModeratedItem {
 	protected $contentFormat = ''; // String
 	protected $editComment = ''; // String
 
-	public function __construct( $id, Post $parentPost, $data = array() ) {
+	public function __construct( $id, $data = array() ) {
 		parent::__construct( $id, $data );
 
-		$this->setParentPost( $parentPost );
-
 		// Set optional data items
-		if ( isset( $config[ 'author' ] ) ) {
-			$this->setAuthor( $config[ 'author' ] );
+		if ( isset( $data[ 'author' ] ) ) {
+			$this->setAuthor( $data[ 'author' ] );
 		}
-		if ( isset( $config[ 'previous_revision' ] ) ) {
-			$this->setPreviousRevision( $config[ 'previous_revision' ] );
+		if ( isset( $data[ 'previous_revision' ] ) ) {
+			$this->setPreviousRevision( $data[ 'previous_revision' ] );
 		}
-		if ( isset( $config[ 'content' ] ) ) {
-			$this->setContent( $config[ 'content' ] );
+		if ( isset( $data[ 'content' ] ) ) {
+			$this->setContent( $data[ 'content' ] );
 		}
-		if ( isset( $config[ 'content_format' ] ) ) {
-			$this->setContentFormat( $config[ 'content_format' ] );
+		if ( isset( $data[ 'content_format' ] ) ) {
+			$this->setContentFormat( $data[ 'content_format' ] );
 		}
 	}
 

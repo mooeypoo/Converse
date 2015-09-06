@@ -15,22 +15,9 @@ class Collection extends ModeratedItem {
 
 	public function __construct( $id, $data = array() ) {
 		parent::__construct( $id, $data );
-
 		// Set optional data items
-		if ( isset( $config[ 'author' ] ) ) {
-			$this->setAuthor( $config[ 'author' ] );
-		}
-		if ( isset( $config[ 'title_post' ] ) ) {
-			$this->setTitlePost( $config[ 'title_post' ] );
-		}
-		if ( isset( $config[ 'primary_post' ] ) ) {
-			$this->setPrimaryPost( $config[ 'primary_post' ] );
-		}
-		if ( isset( $config[ 'summary_post' ] ) ) {
-			$this->setSummaryPost( $config[ 'summary_post' ] );
-		}
-		if ( isset( $config[ 'context_collection' ] ) ) {
-			$this->setContextCollection( $config[ 'context_collection' ] );
+		if ( isset( $data[ 'author' ] ) ) {
+			$this->setAuthor( $data[ 'author' ] );
 		}
 	}
 

@@ -1,0 +1,29 @@
+{
+  "name": "Converse",
+  "author": "Moriel Schottlender",
+  "license": "MIT",
+  "description": "A simple conversation system",
+  "version": "0.1.0",
+  "author_name": "Moriel Schottlender",
+  "author_email": "moo@smarterthanthat.com",
+  "author_url": "http://moriel.smarterthanthat.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mooeypoo/Converse"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-contrib-less": "*",
+    "oojs": "*"
+  },
+  "bugs": {
+    "url": "https://github.com/mooeypoo/Converse/issues"
+  },
+  "homepage": "https://github.com/mooeypoo/Converse",
+  "main": "Gruntfile.js",
+  "keywords": [
+    "forum",
+    "discussion",
+    "conversation"
+  ]
+}

@@ -18,78 +18,6 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Converse`.`posts`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Converse`.`posts` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `latest_revision` INT NULL,
-  `moderation_status` VARCHAR(45) NULL,
-  `moderation_author` INT NULL,
-  `moderation_timestamp` INT NULL,
-  `moderation_reason` TEXT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC),
-  INDEX `fk_posts_latest_revision_idx` (`latest_revision` ASC),
-  INDEX `fk_posts_moderation_author_idx` (`moderation_author` ASC),
-  CONSTRAINT `fk_posts_latest_revision`
-    FOREIGN KEY (`latest_revision`)
-    REFERENCES `Converse`.`revisions` (`id`)
-    ON DELETE SET NULL
-    ON UPDATE CASCADE,
-  CONSTRAINT `fk_posts_moderation_author`
-    FOREIGN KEY (`moderation_author`)
-    REFERENCES `Converse`.`users` (`userid`)
-    ON DELETE SET NULL
-    ON UPDATE CASCADE)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `Converse`.`revisions`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Converse`.`revisions` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `timestamp` INT NULL,
-  `author` INT NULL,
-  `previous_revision` INT NULL,
-  `parent_post` INT NULL,
-  `content` TEXT NULL,
-  `content_format` VARCHAR(45) NULL,
-  `edit_comment` TEXT NULL,
-  `moderation_status` VARCHAR(45) NULL,
-  `moderation_author` INT NULL,
-  `moderation_timestamp` INT NULL,
-  `moderation_reason` TEXT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC),
-  INDEX `fk_revisions_author_idx` (`author` ASC),
-  INDEX `fk_revisions_previous_revision_idx` (`previous_revision` ASC),
-  INDEX `fk_revisions_moderation_author_idx` (`moderation_author` ASC),
-  INDEX `fk_revisions_parent_post_idx` (`parent_post` ASC),
-  CONSTRAINT `fk_revisions_author`
-    FOREIGN KEY (`author`)
-    REFERENCES `Converse`.`users` (`userid`)
-    ON DELETE SET NULL
-    ON UPDATE CASCADE,
-  CONSTRAINT `fk_revisions_previous_revision`
-    FOREIGN KEY (`previous_revision`)
-    REFERENCES `Converse`.`revisions` (`id`)
-    ON DELETE SET NULL
-    ON UPDATE CASCADE,
-  CONSTRAINT `fk_revisions_moderation_author`
-    FOREIGN KEY (`moderation_author`)
-    REFERENCES `Converse`.`users` (`userid`)
-    ON DELETE SET NULL
-    ON UPDATE CASCADE,
-  CONSTRAINT `fk_revisions_parent_post`
-    FOREIGN KEY (`parent_post`)
-    REFERENCES `Converse`.`posts` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
 -- Table `Converse`.`collections`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Converse`.`collections` (
@@ -142,6 +70,85 @@ CREATE TABLE IF NOT EXISTS `Converse`.`collections` (
     REFERENCES `Converse`.`collections` (`id`)
     ON DELETE SET NULL
     ON UPDATE CASCADE)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `Converse`.`posts`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Converse`.`posts` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `latest_revision` INT NULL,
+  `moderation_status` VARCHAR(45) NULL,
+  `moderation_author` INT NULL,
+  `moderation_timestamp` INT NULL,
+  `moderation_reason` TEXT NULL,
+  `parent_collection` INT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC),
+  INDEX `fk_posts_latest_revision_idx` (`latest_revision` ASC),
+  INDEX `fk_posts_moderation_author_idx` (`moderation_author` ASC),
+  INDEX `fk_posts_parent_collection_idx` (`parent_collection` ASC),
+  CONSTRAINT `fk_posts_latest_revision`
+    FOREIGN KEY (`latest_revision`)
+    REFERENCES `Converse`.`revisions` (`id`)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_posts_moderation_author`
+    FOREIGN KEY (`moderation_author`)
+    REFERENCES `Converse`.`users` (`userid`)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_posts_parent_collection`
+    FOREIGN KEY (`parent_collection`)
+    REFERENCES `Converse`.`collections` (`id`)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `Converse`.`revisions`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Converse`.`revisions` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `timestamp` INT NULL,
+  `author` INT NULL,
+  `previous_revision` INT NULL,
+  `parent_post` INT NULL,
+  `content` TEXT NULL,
+  `content_format` VARCHAR(45) NULL,
+  `edit_comment` TEXT NULL,
+  `moderation_status` VARCHAR(45) NULL,
+  `moderation_author` INT NULL,
+  `moderation_timestamp` INT NULL,
+  `moderation_reason` TEXT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC),
+  INDEX `fk_revisions_author_idx` (`author` ASC),
+  INDEX `fk_revisions_previous_revision_idx` (`previous_revision` ASC),
+  INDEX `fk_revisions_moderation_author_idx` (`moderation_author` ASC),
+  INDEX `fk_revisions_parent_post_idx` (`parent_post` ASC),
+  CONSTRAINT `fk_revisions_author`
+    FOREIGN KEY (`author`)
+    REFERENCES `Converse`.`users` (`userid`)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_revisions_previous_revision`
+    FOREIGN KEY (`previous_revision`)
+    REFERENCES `Converse`.`revisions` (`id`)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_revisions_moderation_author`
+    FOREIGN KEY (`moderation_author`)
+    REFERENCES `Converse`.`users` (`userid`)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_revisions_parent_post`
+    FOREIGN KEY (`parent_post`)
+    REFERENCES `Converse`.`posts` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 

@@ -3,20 +3,15 @@
 namespace Converse\UI;
 
 class PostWidget extends \OOUI\Widget {
+	protected $revContent = null;
+
 	public function __construct( $model, $config = array() ) {
 		// Parent constructor
 		parent::__construct( $config );
 
 		$revision = $model->getLatestRevision();
-
-		// Revision details
-		if ( $revision->getContent() !== null ) {
-			$content = new \OOUI\Tag( 'div' );
-			$content->addClasses( array( 'converse-ui-postWidget-content' ) );
-			$content->appendContent( $revision->getContent() );
-			$this->appendContent( $content );
-		}
-
-		$this->addClasses( 'converse-ui-postWidget' );
+		$this->revContent = $revision->getContent();
+		$this->appendContent( $this->revContent );
+		$this->addClasses( array( 'converse-ui-postWidget' ) );
 	}
 }

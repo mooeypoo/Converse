@@ -5,10 +5,11 @@ namespace Converse\Model;
 class Post extends ModeratedItem {
 	protected $latestRevision = null; // Revision
 
-	public function __construct( $id, Revision $latestRevision, $data = array() ) {
+	public function __construct( $id, Collection $owner, Revision $latestRevision, $data = array() ) {
 		parent::__construct( $id, $data );
 
 		$this->setLatestRevision( $latestRevision );
+		$this->setOwnerCollection( $owner );
 	}
 
 	/**
@@ -22,7 +23,7 @@ class Post extends ModeratedItem {
 	}
 
 	public function getLatestRevisionId() {
-		$rev = $this->getLatestRevision()
+		$rev = $this->getLatestRevision();
 		return $rev !== null ?
 			$rev->getId() : null;
 	}
@@ -33,5 +34,13 @@ class Post extends ModeratedItem {
 
 	public function setLatestRevision( $revId ) {
 		$this->latestRevision = $revId;
+	}
+
+	public function setOwnerCollection( $collection ) {
+		$this->ownerCollection = $collection;
+	}
+
+	public function getOwnerCollection() {
+		return $this->ownerCollection;
 	}
 }
