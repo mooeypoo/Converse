@@ -33,10 +33,15 @@ class ModelBuilder {
 		$children = $this->dbhelper->getCollectionChildren( $collectionId );
 
 		// Populate each child
+		// TODO: This piece should use logic to preserve maximum nesting
+		// The nesting is also relative to the view. If we are looking at
+		// a topic, we will see certain posts as the same level, but they
+		// might have different levels if we look at a more specific post
+		// thread.
 		foreach ( $children as $i => $data ) {
-			// TODO: Deal with stickies here, maybe?
+			// TODO: Deal with stickies here
 			$childId = $data['child_collection_id'];
-			$childrenArray[] = $this->populateCollection( $id );
+			$childrenArray[] = $this->populateCollection( $childId );
 		}
 
 		$collection->addItems( $childrenArray );

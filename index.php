@@ -7,6 +7,27 @@ use Doctrine\Common\ClassLoader;
 $classLoader = new ClassLoader('Doctrine', 'vendor/doctrine');
 $classLoader->register();
 
+OOUI\Theme::setSingleton( new OOUI\ApexTheme() );
+OOUI\Element::setDefaultDir( 'ltr' );
+$styles = array(
+	'styles/ooui/oojs-ui-apex.css',
+	// 'styles/converse.css',
+	// 'styles/converse.PostWidget.css'
+);
+
+
+// Test
+?>
+<html>
+	<head>
+<?php
+	for ( $i = 0; $i < count( $styles ); $i++ ) {
+		echo '<link rel="stylesheet" href="' . $styles[$i] . '">'."\n";
+	}
+?>
+	</head>
+<body>
+<?php
 
 echo "<h1>Converse</h1>";
 
@@ -23,4 +44,6 @@ echo "<h1>Converse</h1>";
 $builder = new Converse\Model\ModelBuilder();
 $collection = $builder->populateCollection( 16 );
 
-var_dump( $collection );
+$collectionWidget = new Converse\UI\CollectionWidget( $collection );
+echo $collectionWidget;
+// var_dump( $collection );
