@@ -1,0 +1,12 @@
+{
+	"require": {
+		"oojs/oojs-ui": "*",
+		"doctrine/dbal": "^2.5"
+	},
+	"require-dev": {
+		"phpdocumentor/phpdocumentor": "2.*"
+	},
+	"autoload": {
+		"classmap": [ "includes" ]
+	}
+}

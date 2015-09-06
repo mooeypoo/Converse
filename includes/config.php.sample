@@ -1,0 +1,15 @@
+<?php
+
+namespace Converse;
+
+class Config extends BaseConfig {
+	static function getDatabaseDetails() {
+		return array(
+			'host' => 'localhost',
+			'dbname' => 'Converse',
+			'user' => 'some_user',
+			'password' => 'a_password',
+			'driver' => 'pdo_mysql'
+		);
+	}
+}

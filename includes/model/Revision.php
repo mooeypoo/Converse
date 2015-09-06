@@ -1,0 +1,97 @@
+<?php
+
+namespace Converse\Model;
+
+class Revision extends ModeratedItem {
+	protected $author = null; // User
+	protected $previousRevision = null; // Revision
+	protected $parentPost = null; // Post
+	protected $content = ''; // String
+	protected $contentFormat = ''; // String
+	protected $editComment = ''; // String
+
+	public function __construct( $id, Post $parentPost, $data = array() ) {
+		parent::__construct( $id, $data );
+
+		$this->setParentPost( $parentPost );
+
+		// Set optional data items
+		if ( isset( $config[ 'author' ] ) ) {
+			$this->setAuthor( $config[ 'author' ] );
+		}
+		if ( isset( $config[ 'previous_revision' ] ) ) {
+			$this->setPreviousRevision( $config[ 'previous_revision' ] );
+		}
+		if ( isset( $config[ 'content' ] ) ) {
+			$this->setContent( $config[ 'content' ] );
+		}
+		if ( isset( $config[ 'content_format' ] ) ) {
+			$this->setContentFormat( $config[ 'content_format' ] );
+		}
+	}
+
+	/**
+	 * Get a full array of field/values fit for the database
+	 * @return Array
+	 */
+	public function getAllProperties() {
+		return parent::getAllProperties() + array(
+			'author' => $this->getAuthor() ? $this->getAuthor()->getId() : null,
+			'previous_revision' => $this->getPreviousRevision(),
+			'parent_post' => $this->getParentPost(),
+			'content' => $this->getContent(),
+			'content_format' => $this->getContentFormat(),
+			'edit_comment' => $this->getEditComment(),
+		);
+	}
+
+	/** Setters and getters */
+
+	public function setParentPost( $id ) {
+		$this->parentPost = $id;
+	}
+
+	public function getParentPost() {
+		return $this->parentPost;
+	}
+
+	public function setAuthor( $author ) {
+		$this->author = $author;
+	}
+
+	public function getAuthor() {
+		return $this->author;
+	}
+
+	public function setPreviousRevision( $revision ) {
+		$this->previousRevision = $revision;
+	}
+
+	public function getPreviousRevision() {
+		return $this->previousRevision;
+	}
+
+	public function setContent( $content ) {
+		$this->content = $content;
+	}
+
+	public function getContent() {
+		return $this->content;
+	}
+
+	public function setContentFormat( $format ) {
+		$this->contentFormat = $format;
+	}
+
+	public function getContentFormat() {
+		return $this->contentFormat;
+	}
+
+	public function setEditComment( $comment ) {
+		$this->editComment = $comment;
+	}
+
+	public function getEditComment() {
+		return $this->editComment;
+	}
+}
