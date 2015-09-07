@@ -1,12 +1,16 @@
 <?php
 require_once "vendor/autoload.php";
 require 'vendor/doctrine/common/lib/Doctrine/Common/ClassLoader.php';
-
 use Doctrine\Common\ClassLoader;
 
 $classLoader = new ClassLoader('Doctrine', 'vendor/doctrine');
 $classLoader->register();
 
+// TODO: This should REALLY be done better...
+$uri_parts = explode('?', $_SERVER['REQUEST_URI'], 2);
+define( 'BASE_URL', 'http://' . $_SERVER['HTTP_HOST'] . $uri_parts[0] );
+
+// OOUI
 OOUI\Theme::setSingleton( new OOUI\ApexTheme() );
 OOUI\Element::setDefaultDir( 'ltr' );
 $styles = array(
@@ -14,6 +18,7 @@ $styles = array(
 	'includes/styles/Converse.css'
 );
 
+$paramCollectionId = $_GET['cid'];
 
 // Test
 ?>
@@ -41,12 +46,11 @@ echo "<h1>Converse</h1>";
 // $topic2Id = $dbhelper->addNewCollection( $boardId, 'This is another topic content', 'This is another topic title', 'This is another optional description or summary' );
 // $replyIdTopic2 = $dbhelper->addNewCollection( $topic2Id, 'This is the content of the reply to another topic' );
 
-$boardId = 1;
+$boardId = isset( $paramCollectionId ) ? $paramCollectionId : 1;
+
 // Build a collection model
 $builder = new Converse\Model\ModelBuilder();
 $collection = $builder->populateCollection( $boardId );
-
-// var_dump($collection);
 
 $collectionWidget = new Converse\UI\CollectionWidget( $collection );
 echo $collectionWidget;

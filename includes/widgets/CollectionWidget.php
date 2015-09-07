@@ -3,37 +3,55 @@
 namespace Converse\UI;
 
 class CollectionWidget extends \OOUI\Widget {
+	protected $linkPretext = 'Show';
+	protected $showCollectionLink = true;
 
 	public function __construct( $model, $config = array() ) {
 		// Parent constructor
 		parent::__construct( $config );
+
+		if ( isset( $config['showCollectionLink' ] ) ) {
+			$this->showCollectionLink = $config['showCollectionLink' ];
+		}
+
 		// TODO: Add timestamp + author information
 		// TODO: Add moderation info + controls
 		// TODO: Add reply / add children
 		$groupDiv = new \OOUI\Tag();
 		$groupDiv->addClasses( array( 'converse-ui-collection-group' ) );
 
-		$headerDiv = new \OOUI\Tag();
-		$headerDiv->addClasses( array( 'converse-ui-collection-header' ) );
-
 		// Mixins
 		$this->mixin( new \OOUI\GroupElement( $this, array_merge( $config, array( 'group' => $groupDiv ) ) ) );
 
 		// Title post widget
 		if ( $model->getTitlePost() !== null ) {
+			$headerDiv = new \OOUI\Tag();
+			$headerDiv->addClasses( array( 'converse-ui-collection-header' ) );
+
 			$titleWidget = new PostWidget( $model->getTitlePost() );
 			$titleWidget->addClasses( array( 'converse-ui-collectionWidget-title' ) );
-			$headerDiv->appendContent( $titleWidget );
+
+			$headerDiv->appendContent( $titleWidget, $idLink );
+			$this->appendContent( $headerDiv );
+		}
+
+		// ID LINK
+		if ( $this->showCollectionLink ) {
+			// TODO: Do this whole base_url thing better. This is bad and messy.
+			$idLink = new \OOUI\Tag( 'a' );
+			$idLink->setAttributes( array(
+				'href' => BASE_URL . '?cid=' . $model->getId()
+			) );
+			// TODO: Work with i18n messages, and make this extendible
+			$idLink->appendContent( $this->linkPretext );
+			$this->appendContent( $idLink );
 		}
 
 		// Summary post widget
 		if ( $model->getSummaryPost() !== null ) {
 			$summaryPostWidget = new PostWidget( $model->getSummaryPost() );
 			$summaryPostWidget->addClasses( array( 'converse-ui-collectionWidget-summary' ) );
-			$headerDiv->appendContent( $summaryPostWidget );
-		}
-		if ( $model->getTitlePost() !== null || $model->getSummaryPost() !== null ) {
-			$this->appendContent( $headerDiv );
+			$this->appendContent( $summaryPostWidget );
 		}
 
 		// Primary post widget
