@@ -1,11 +1,11 @@
-= Converse =
+# Converse
 
 A light weight discussion system with javascript interactive layer.
 
-== Purpose ==
+## Purpose
 Develop a light weight and flexible discussion system for focused discussions. This is not a replacement for full blown forums, but rather a specific solution for more contextual group discussions.
 
-== Features ==
+## Features
 * Create discussions with title, descripion and content.
 * Discussions should hold child discussions ("topics") and these should also have child discussions ("reply threads")
 * The structure of the discussion is preserved by context in the database; each child is connected to its original parent unless moved elsewhere.
@@ -18,17 +18,17 @@ level of the display.
 * A top layer of Javascript should add interactive operations.
 * The system should supply an accessible API for the operations against the database.
 
-== Software Status ==
+## Software Status
 This is a side project I'm working on to re-develop my php skills. As such, there are a few things to note:
 * The software is not ready for use! It is still being developed, and is extremely unstable. Please beware and don't put this code anywhere close to production servers or anywhere that actually matters until it's stable.
 * Since this is somewhat of a learning experience, please be aware there may be (and probably are) some atrocious bits of php code. If you see them, please comment or add an issue to the list. And feel free to send a pull request!
 * There are several key places where I've noted the software should be optimized. For the moment, the thinking is to Make It Work and create a proper infrastructure. Optimization is next.
 
-== Bugs and features ==
+## Bugs and features
 Feel free to report bugs, feature requests, and/or any other comment. And, of course, pull requests are welcome.
 
-== License ==
+## License
 This code is licensed MIT. Feel free to fork it and do what you will, just please credit the author(s) in the list. Better yet, if you're considering forking, please consider joining the project or sending pull requests.
 
-=== Author(s) ===
+### Author(s)
 Moriel Schottlender
