@@ -18,7 +18,7 @@ $styles = array(
 	'includes/styles/Converse.css'
 );
 
-$paramCollectionId = $_GET['cid'];
+$collectionId = isset( $_GET['cid'] ) ? $_GET['cid'] : 1;
 
 // Test
 ?>
@@ -43,14 +43,23 @@ echo "<h1>Converse</h1>";
 // $replyIdLevel1b = $dbhelper->addNewCollection( $topicId, 'This is reply #2 content' );
 // $replyIdLevel2a = $dbhelper->addNewCollection( $replyIdLevel1a, 'This is reply #1a1 content' );
 // $replyIdLevel2b = $dbhelper->addNewCollection( $replyIdLevel1a, 'This is reply #1a2 content' );
+// $replyIdLevel2a1 = $dbhelper->addNewCollection( $replyIdLevel2a, 'This is reply #2a11 content' );
+// $replyIdLevel2a2 = $dbhelper->addNewCollection( $replyIdLevel2a, 'This is reply #2a22 content' );
+// $replyIdLevel2a11 = $dbhelper->addNewCollection( $replyIdLevel2a1, 'This is reply #2a11 content' );
+// $replyIdLevel2a12 = $dbhelper->addNewCollection( $replyIdLevel2a11, 'This is reply #2a22 content' );
+// $replyIdLevel2a121 = $dbhelper->addNewCollection( $replyIdLevel2a12, 'This is reply #2a22 content' );
+// $replyIdLevel2a1211 = $dbhelper->addNewCollection( $replyIdLevel2a121, 'This is reply #2a22 content' );
+// $replyIdLevel2a12111 = $dbhelper->addNewCollection( $replyIdLevel2a1211, 'This is reply #2a22 content' );
+// $replyIdLevel2a121111 = $dbhelper->addNewCollection( $replyIdLevel2a12111, 'This is reply #2a22 content' );
 // $topic2Id = $dbhelper->addNewCollection( $boardId, 'This is another topic content', 'This is another topic title', 'This is another optional description or summary' );
 // $replyIdTopic2 = $dbhelper->addNewCollection( $topic2Id, 'This is the content of the reply to another topic' );
 
-$boardId = isset( $paramCollectionId ) ? $paramCollectionId : 1;
+
+
 
 // Build a collection model
 $builder = new Converse\Model\ModelBuilder();
-$collection = $builder->populateCollection( $boardId );
+$collection = $builder->buildCollectionHierarchy( $collectionId );
 
 $collectionWidget = new Converse\UI\CollectionWidget( $collection );
 echo $collectionWidget;

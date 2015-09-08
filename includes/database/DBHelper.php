@@ -137,7 +137,8 @@ class DBHelper {
 				array(
 					'collection_id' => $context,
 					'child_collection_id' => $collectionId
-				)
+				),
+				true
 			);
 		}
 
@@ -192,7 +193,7 @@ class DBHelper {
 	 */
 	protected function addRawCollection( $primaryPostId, $data = array() ) {
 		$data[ 'primary_post' ] = $primaryPostId;
-		return $this->insert( 'collections', $data );
+		return $this->insert( 'collections', $data, true );
 	}
 
 	/**
@@ -212,7 +213,7 @@ class DBHelper {
 	 */
 	protected function addRawPost( $revisionId ) {
 		$data[ 'latest_revision' ] = $revisionId;
-		$postId = $this->insert( 'posts', $data );
+		$postId = $this->insert( 'posts', $data, true );
 
 		// Update the revision's parent id
 		$this->update( 'revisions', array( 'parent_post' => $postId ), $revisionId );
@@ -227,10 +228,10 @@ class DBHelper {
 	 * @return [type] [description]
 	 */
 	protected function _verifyAndSetTimestamps( $data = array() ) {
-		if ( !$data['timestamp'] ) {
+		if ( !isset( $data['timestamp'] ) ) {
 			$data['timestamp'] = time();
 		}
-		if ( $data['moderation_status'] && !$data['moderation_timestamp'] ) {
+		if ( isset( $data['moderation_status'] ) && !isset( $data['moderation_timestamp'] ) ) {
 			$data['moderation_timestamp'] = time();
 		}
 		return $data;
@@ -260,7 +261,7 @@ class DBHelper {
 	 * @return int Inserted row id
 	 */
 	protected function insert( $table, $data, $skipTimestamp = false ) {
-		if ( $skipTimestamp === true ) {
+		if ( $skipTimestamp === false ) {
 			$data = $this->_verifyAndSetTimestamps( $data );
 		}
 		$this->connection->insert( $table, $data );

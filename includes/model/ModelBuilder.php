@@ -4,11 +4,31 @@ namespace Converse\Model;
 
 class ModelBuilder {
 	protected $dbhelper = null;
+	protected $nestingChildren = array();
 
 	public function __construct( $config = array() ) {
 		$connectionParams = \Converse\Config::getDatabaseDetails();
 
 		$this->dbhelper = new \Converse\DB\DBHelper( $connectionParams );
+		$this->maxNestingLevel = \Converse\Config::getMaxNesting();
+	}
+
+	/**
+	 * Build a collection hierarchy from a parent collection, and populate
+	 * all its children according to the maximum nesting levels.
+	 *
+	 * @param int $collectionId Collection Id
+	 * @param Collection [$context] Collection's context (parent)
+	 * @return Collection Collection model
+	 */
+	public function buildCollectionHierarchy( $collectionId ) {
+		// Reset
+		$this->nestingChildren = array();
+
+		// Populate
+		$collection = $this->populateCollection( $collectionId );
+
+		return $collection;
 	}
 
 	/**
@@ -20,9 +40,10 @@ class ModelBuilder {
 	 * to retrieve it recursively.
 	 *
 	 * @param int $collectionId Collection Id
+	 * @param Collection [$context] Collection's context (parent)
 	 * @return Collection Collection model
 	 */
-	public function populateCollection( $collectionId, $context = null ) {
+	protected function populateCollection( $collectionId, $context = null, $nestingLevel = 0 ) {
 		$childrenArray = array();
 
 		// Get the collection data
@@ -48,19 +69,38 @@ class ModelBuilder {
 		// Get children
 		$children = $this->dbhelper->getCollectionChildren( $collectionId );
 
-		// Populate each child
-		// TODO: This piece should use logic to preserve maximum nesting
-		// The nesting is also relative to the view. If we are looking at
-		// a topic, we will see certain posts as the same level, but they
-		// might have different levels if we look at a more specific post
-		// thread.
+		// Analyze children to see if we should add them as children or
+
 		foreach ( $children as $i => $data ) {
 			// TODO: Deal with stickies here
 			$childId = $data['child_collection_id'];
-			$childrenArray[] = $this->populateCollection( $childId );
+
+			if ( $nestingLevel >= $this->maxNestingLevel - 1 ) {
+				// We are too deep in the nesting levels. These children should be
+				// added upwards, in the ancestor that is the top nesting level
+				$this->nestingChildren[] = $this->populateCollection( $childId, $collection, $nestingLevel + 1 );
+			} else {
+				// Add to direct children's array
+				$childrenArray[] = $this->populateCollection( $childId, $collection, $nestingLevel + 1 );
+			}
 		}
 
-		$collection->addItems( $childrenArray );
+		// Now that we're done collecting children, add them
+		// but only add if we are not above the nesting level
+		if ( $nestingLevel === $this->maxNestingLevel - 1 ) {
+			// We are at the top nesting level. All descendant's children
+			// should be added here, ordered by date
+
+			// Order children by date
+			usort( $this->nestingChildren, array( __CLASS__, 'compareCollectionDates' ) );
+
+			// Add all grand-children and children
+			$collection->addItems( $this->nestingChildren );
+		} else if ( $nestingLevel < $this->maxNestingLevel ) {
+			// Add children here normally
+			$collection->addItems( $childrenArray );
+		}
+
 		return $collection;
 	}
 
@@ -71,7 +111,7 @@ class ModelBuilder {
 	 * @param [type] $postId [description]
 	 * @return Post Post model
 	 */
-	public function populatePost( $postId, $ownerCollection ) {
+	protected function populatePost( $postId, $ownerCollection ) {
 		// Get post data
 		$postData = $this->dbhelper->getPost( $postId );
 
@@ -89,5 +129,25 @@ class ModelBuilder {
 		$revision->setParentPost( $post );
 
 		return $post;
+	}
+
+	/**
+	 * Compare two timestamps of the primary posts of given collections.
+	 * This is meant for sorting collections by date.
+	 *
+	 * @param Collection $collection1
+	 * @param Collection $collection2
+	 * @return int Comparison result; -1 if smaller, 1 if bigger or equal
+	 */
+	protected static function compareCollectionDates( $collection1, $collection2 ) {
+		// TODO: Deal with stickies here. Sticky should always be
+		// on top
+
+		$date1 = $collection1->getPrimaryPost() !== null ?
+			$collection1->getPrimaryPost()->getLatestRevision()->getTimestamp() : 0;
+		$date2 = $collection2->getPrimaryPost() !== null ?
+			$collection1->getPrimaryPost()->getLatestRevision()->getTimestamp() : 0;
+
+		return $date1 < $date2 ? -1 : 1;
 	}
 }

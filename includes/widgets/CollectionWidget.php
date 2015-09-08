@@ -5,6 +5,7 @@ namespace Converse\UI;
 class CollectionWidget extends \OOUI\Widget {
 	protected $linkPretext = 'Show';
 	protected $showCollectionLink = true;
+	protected $dateFormat = '';
 
 	public function __construct( $model, $config = array() ) {
 		// Parent constructor
@@ -13,6 +14,8 @@ class CollectionWidget extends \OOUI\Widget {
 		if ( isset( $config['showCollectionLink' ] ) ) {
 			$this->showCollectionLink = $config['showCollectionLink' ];
 		}
+
+		$this->dateFormat = \Converse\Config::getDateFormat();
 
 		// TODO: Add timestamp + author information
 		// TODO: Add moderation info + controls
@@ -31,7 +34,7 @@ class CollectionWidget extends \OOUI\Widget {
 			$titleWidget = new PostWidget( $model->getTitlePost() );
 			$titleWidget->addClasses( array( 'converse-ui-collectionWidget-title' ) );
 
-			$headerDiv->appendContent( $titleWidget, $idLink );
+			$headerDiv->appendContent( $titleWidget );
 			$this->appendContent( $headerDiv );
 		}
 
@@ -58,7 +61,10 @@ class CollectionWidget extends \OOUI\Widget {
 		if ( $model->getPrimaryPost() !== null ) {
 			$primaryPostWidget = new PostWidget( $model->getPrimaryPost() );
 			$primaryPostWidget->addClasses( array( 'converse-ui-collectionWidget-primary' ) );
-			$this->appendContent( $primaryPostWidget );
+
+			// Ugly ugly ugly. This is just for test purposes, it really should be rewritten!
+			$timestamp = $model->getPrimaryPost()->getLatestRevision()->getTimestamp();
+			$this->appendContent( $primaryPostWidget, date( $this->dateFormat, $timestamp ) );
 		}
 
 		// Recurse through children...
