@@ -11,9 +11,7 @@ class Collection extends ModeratedItem {
 	protected $summaryPost = null; // Post
 	protected $contextCollection = null; // Collection
 
-	protected $children = array();
-
-	public function __construct( $id, $data = array() ) {
+	public function __construct( $id, $data = array(), $config = array() ) {
 		parent::__construct( $id, $data );
 		// Set optional data items
 		if ( isset( $data[ 'author' ] ) ) {
@@ -26,14 +24,42 @@ class Collection extends ModeratedItem {
 	 *
 	 * @return Array
 	 */
-	public function getAllProperties() {
+	public function getAllProperties( $getAllChildren ) {
 		return parent::getAllProperties() + array(
 			'author' => $this->getAuthor() ? $this->getAuthor()->getId() : null,
 			'title_post' => $this->getTitlePost() ? $this->getTitlePost()->getId() : null,
 			'primary_post' => $this->getPrimaryPost() ? $this->getPrimaryPost()->getId() : null,
 			'summary_post' => $this->getSummaryPost() ? $this->getSummaryPost()->getId() : null,
 			'context_collection' => $this->getContextCollection() ? $this->getContextCollection()->getId() : null,
+			'children' => $getAllChildren ? $this->getChildrenProperties() : null,
 		);
+	}
+
+	public function getChildrenProperties() {
+		$items = $this->getItems();
+		$result = array();
+
+		foreach ( $items as $item ) {
+			$result[$item->getId()] = $item->getAllProperties( true );
+		}
+		return $result;
+	}
+
+	public function getChildrenIds() {
+		$items = $this->getItems();
+		$childrenIds = array();
+
+		foreach ( $items as $child ) {
+			$hildrenIds[$child->getId()] = array();
+			// Do the same for the child
+			$childrenIds[$child->getId()] = $child->getChildrenIds();
+		}
+
+		return $childrenIds;
+	}
+
+	protected function populateChildrenIds() {
+
 	}
 
 	public function setAuthor( $author ) {

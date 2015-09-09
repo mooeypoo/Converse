@@ -8,6 +8,8 @@ namespace Converse\Model;
 class ModelBuilder {
 	protected $dbhelper = null;
 	protected $nestingChildren = array();
+	protected $ignoreMaxNesting = false;
+	protected $overrideMaxNesting = 0;
 
 	/**
 	 * Construct the model builder; create a database helper and
@@ -21,6 +23,14 @@ class ModelBuilder {
 
 		$this->dbhelper = new \Converse\DB\DBHelper( $connectionParams );
 		$this->maxNestingLevel = \Converse\Config::getMaxNesting();
+	}
+
+	public function setIgnoreMaxNesting( $isIgnore ) {
+		$this->ignoreMaxNesting = $isIgnore;
+	}
+
+	public function setOverrideMaxNesting( $newMax ) {
+		$this->maxNestingLevel = $newMax;
 	}
 
 	/**
@@ -83,12 +93,12 @@ class ModelBuilder {
 		$children = $this->dbhelper->getCollectionChildren( $collectionId );
 
 		// Analyze children to see if we should add them as children or
-
+		// children of the ancestor
 		foreach ( $children as $i => $data ) {
 			// TODO: Deal with stickies here
 			$childId = $data['child_collection_id'];
 
-			if ( $nestingLevel >= $this->maxNestingLevel - 1 ) {
+			if ( !$this->ignoreMaxNesting && $nestingLevel >= $this->maxNestingLevel - 1 ) {
 				// We are too deep in the nesting levels. These children should be
 				// added upwards, in the ancestor that is the top nesting level
 				$this->nestingChildren[] = $this->populateCollection( $childId, $collection, $nestingLevel + 1 );
@@ -100,7 +110,7 @@ class ModelBuilder {
 
 		// Now that we're done collecting children, add them
 		// but only add if we are not above the nesting level
-		if ( $nestingLevel === $this->maxNestingLevel - 1 ) {
+		if ( !$this->ignoreMaxNesting && $nestingLevel === $this->maxNestingLevel - 1 ) {
 			// We are at the top nesting level. All descendant's children
 			// should be added here, ordered by date
 
@@ -109,7 +119,10 @@ class ModelBuilder {
 
 			// Add all grand-children and children
 			$collection->addItems( $this->nestingChildren );
-		} else if ( $nestingLevel < $this->maxNestingLevel ) {
+
+			// We've added these children, so reset the array
+			$this->nestingChildren = array();
+		} else if ( $this->ignoreMaxNesting || $nestingLevel < $this->maxNestingLevel ) {
 			// Add children here normally
 			$collection->addItems( $childrenArray );
 		}

@@ -32,7 +32,7 @@ class DBHelper {
 
 	public function getCollectionChildren( $id ) {
 		return $this->connection->fetchAll(
-			'SELECT * FROM collection_children WHERE collection_id='.$id
+			'SELECT child_collection_id FROM collection_children WHERE collection_id='.$id
 		);
 	}
 
