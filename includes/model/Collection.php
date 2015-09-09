@@ -24,13 +24,13 @@ class Collection extends ModeratedItem {
 	 *
 	 * @return Array
 	 */
-	public function getAllProperties( $getAllChildren ) {
-		return parent::getAllProperties() + array(
-			'author' => $this->getAuthor() ? $this->getAuthor()->getId() : null,
-			'title_post' => $this->getTitlePost() ? $this->getTitlePost()->getId() : null,
-			'primary_post' => $this->getPrimaryPost() ? $this->getPrimaryPost()->getId() : null,
-			'summary_post' => $this->getSummaryPost() ? $this->getSummaryPost()->getId() : null,
-			'context_collection' => $this->getContextCollection() ? $this->getContextCollection()->getId() : null,
+	public function getApiProperties( $getAllChildren ) {
+		return parent::getApiProperties() + array(
+			'author' => $this->getAuthor(),
+			'title_post' => $this->getTitlePost() ? $this->getTitlePost()->getApiProperties() : null,
+			'primary_post' => $this->getPrimaryPost() ? $this->getPrimaryPost()->getApiProperties() : null,
+			'summary_post' => $this->getSummaryPost() ? $this->getSummaryPost()->getApiProperties() : null,
+			'context_collection_id' => $this->getContextCollection() ? $this->getContextCollection()->getId() : null,
 			'children' => $getAllChildren ? $this->getChildrenProperties() : null,
 		);
 	}
@@ -40,7 +40,7 @@ class Collection extends ModeratedItem {
 		$result = array();
 
 		foreach ( $items as $item ) {
-			$result[$item->getId()] = $item->getAllProperties( true );
+			$result[$item->getId()] = $item->getApiProperties( true );
 		}
 		return $result;
 	}

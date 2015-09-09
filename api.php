@@ -16,7 +16,7 @@ $app->get( '/collection/{id}', function ( Silex\Application $app, $id ) {
 	$collection = $builder->buildCollectionHierarchy( $id, false );
 
 	// Get the properties
-	return json_encode( $collection->getAllProperties() );
+	return json_encode( $collection->getApiProperties() );
 } );
 
 $app->get( '/collection/{id}/full', function ( Silex\Application $app, $id ) {
@@ -28,7 +28,7 @@ $app->get( '/collection/{id}/full', function ( Silex\Application $app, $id ) {
 	$collection = $builder->buildCollectionHierarchy( $id );
 
 	// Get the properties
-	return json_encode( $collection->getAllProperties( true ) );
+	return json_encode( $collection->getApiProperties( true ) );
 } );
 
 
@@ -41,7 +41,7 @@ $app->get( '/collection/{id}/full/{nesting}', function ( Silex\Application $app,
 	$collection = $builder->buildCollectionHierarchy( $id );
 
 	// Get the properties
-	return json_encode( $collection->getAllProperties( true ) );
+	return json_encode( $collection->getApiProperties( true ) );
 } );
 
 

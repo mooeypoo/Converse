@@ -35,8 +35,8 @@ class Revision extends ModeratedItem {
 	public function getAllProperties() {
 		return parent::getAllProperties() + array(
 			'author' => $this->getAuthor() ? $this->getAuthor()->getId() : null,
-			'previous_revision' => $this->getPreviousRevision(),
-			'parent_post' => $this->getParentPost(),
+			'previous_revision_id' => $this->getPreviousRevision() ? $this->getPreviousRevision()->getId() : null,
+			'parent_post_id' => $this->getParentPost() ? $this->getParentPost()->getId() : null,
 			'content' => $this->getContent(),
 			'content_format' => $this->getContentFormat(),
 			'edit_comment' => $this->getEditComment(),

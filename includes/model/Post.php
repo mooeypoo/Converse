@@ -16,9 +16,9 @@ class Post extends ModeratedItem {
 	 * Get a full array of field/values fit for the database
 	 * @return Array
 	 */
-	public function getAllProperties() {
-		return parent::getAllProperties() + array(
-			'latest_revision' => $this->getLatestRevisionId()
+	public function getApiProperties() {
+		return parent::getApiProperties() + array(
+			'latest_revision' => $this->getLatestRevision() ? $this->getLatestRevision()->getApiProperties() : null,
 		);
 	}
 

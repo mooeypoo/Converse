@@ -43,7 +43,7 @@ class ModeratedItem {
 	 * Get a full array of field/values fit for the database
 	 * @return Array
 	 */
-	public function getAllProperties() {
+	public function getApiProperties() {
 		return array(
 			'id' => $this->getId(),
 			'timestamp' => $this->getTimestamp(),
@@ -133,6 +133,6 @@ class ModeratedItem {
 	}
 
 	public function __toString() {
-		return json_encode( $this->getAllProperties() );
+		return json_encode( $this->getApiProperties() );
 	}
 }
