@@ -33,7 +33,7 @@ class Revision extends ModeratedItem {
 	 * @return Array
 	 */
 	public function getAllProperties() {
-		return parent::getAllProperties() + array(
+		$result = parent::getAllProperties() + array(
 			'author' => $this->getAuthor() ? $this->getAuthor()->getId() : null,
 			'previous_revision_id' => $this->getPreviousRevision() ? $this->getPreviousRevision()->getId() : null,
 			'parent_post_id' => $this->getParentPost() ? $this->getParentPost()->getId() : null,
@@ -41,6 +41,8 @@ class Revision extends ModeratedItem {
 			'content_format' => $this->getContentFormat(),
 			'edit_comment' => $this->getEditComment(),
 		);
+
+		return parent::cleanNullElements( $result );
 	}
 
 	/** Setters and getters */

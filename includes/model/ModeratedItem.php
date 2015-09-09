@@ -55,6 +55,16 @@ class ModeratedItem {
 		);
 	}
 
+	public static function cleanNullElements( $array ) {
+		$result = array();
+		foreach ( $array as $key => $value ) {
+			if ( $value !== null ) {
+				$result[$key] = $value;
+			}
+		}
+		return $result;
+	}
+
 	/**
 	 * Set item id
 	 *

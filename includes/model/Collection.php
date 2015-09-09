@@ -25,7 +25,7 @@ class Collection extends ModeratedItem {
 	 * @return Array
 	 */
 	public function getApiProperties( $getAllChildren ) {
-		return parent::getApiProperties() + array(
+		$result = parent::getApiProperties() + array(
 			'author' => $this->getAuthor(),
 			'title_post' => $this->getTitlePost() ? $this->getTitlePost()->getApiProperties() : null,
 			'primary_post' => $this->getPrimaryPost() ? $this->getPrimaryPost()->getApiProperties() : null,
@@ -33,6 +33,7 @@ class Collection extends ModeratedItem {
 			'context_collection_id' => $this->getContextCollection() ? $this->getContextCollection()->getId() : null,
 			'children' => $getAllChildren ? $this->getChildrenProperties() : null,
 		);
+		return parent::cleanNullElements( $result );
 	}
 
 	public function getChildrenProperties() {
