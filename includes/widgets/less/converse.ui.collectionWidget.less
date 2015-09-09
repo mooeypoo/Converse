@@ -1,10 +1,41 @@
 .converse-ui-collectionWidget {
 	border: 1px solid #cccccc;
-	padding: 0.5em;
+	padding: 0.3em;
 
 	// Nested collections
 	.converse-ui-collectionWidget {
 		margin-left: 0.5em;
 		margin-top: 1em;
+		-webkit-box-shadow: -1px -1px 4px 0px rgba(150,150,150,0.79);
+		-moz-box-shadow: -1px -1px 4px 0px rgba(150,150,150,0.79);
+		box-shadow: -1px -1px 4px 0px rgba(150,150,150,0.79);
+
+		.converse-ui-collectionWidget-title {
+			background: #A5F2DB;
+		}
+	}
+
+	&-title {
+		background: #A5E0F2;
+		padding: 0.3em;
+	}
+
+	&-summary {
+		background: #E3E3E3;
+	}
+
+	&-linkButton {
+		font-size: 0.85em;
+		float: right;
+	}
+
+	&-timestamp {
+		font-size: 0.85em;
+		padding: 0.3em;
+		opacity: 0.7;
+
+		&:hover {
+			opacity: 1;
+		}
 	}
 }

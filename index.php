@@ -11,10 +11,11 @@ $uri_parts = explode('?', $_SERVER['REQUEST_URI'], 2);
 define( 'BASE_URL', 'http://' . $_SERVER['HTTP_HOST'] . $uri_parts[0] );
 
 // OOUI
-OOUI\Theme::setSingleton( new OOUI\ApexTheme() );
+OOUI\Theme::setSingleton( new OOUI\MediaWikiTheme() );
 OOUI\Element::setDefaultDir( 'ltr' );
 $styles = array(
-	'includes/styles/ooui/oojs-ui-apex.css',
+	'includes/styles/ooui/oojs-ui-mediawiki.css',
+	'includes/styles/ooui/oojs-ui-mediawiki-icons-content.min.css',
 	'includes/styles/Converse.css'
 );
 
@@ -33,7 +34,7 @@ $collectionId = isset( $_GET['cid'] ) ? $_GET['cid'] : 1;
 <body>
 <?php
 
-echo "<h1>Converse</h1>";
+echo "<h1>Converse Demo</h1>";
 
 /* Example DB operation */
 // $dbhelper = new Converse\DB\DBHelper( \Converse\Config::getDatabaseDetails() );
@@ -61,5 +62,6 @@ echo "<h1>Converse</h1>";
 $builder = new Converse\Model\ModelBuilder();
 $collection = $builder->buildCollectionHierarchy( $collectionId );
 
+// Display collection widget
 $collectionWidget = new Converse\UI\CollectionWidget( $collection );
 echo $collectionWidget;

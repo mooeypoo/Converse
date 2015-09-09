@@ -2,10 +2,20 @@
 
 namespace Converse\Model;
 
+/**
+ * Create and build the model from the database.
+ */
 class ModelBuilder {
 	protected $dbhelper = null;
 	protected $nestingChildren = array();
 
+	/**
+	 * Construct the model builder; create a database helper and
+	 * store configuration.
+	 *
+	 * @constructor
+	 * @param array $config Configuration object
+	 */
 	public function __construct( $config = array() ) {
 		$connectionParams = \Converse\Config::getDatabaseDetails();
 
@@ -27,6 +37,9 @@ class ModelBuilder {
 
 		// Populate
 		$collection = $this->populateCollection( $collectionId );
+
+		// Hook
+		\Converse\Hooks::run( 'afterBuildCollection' );
 
 		return $collection;
 	}

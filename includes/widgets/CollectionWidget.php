@@ -26,6 +26,20 @@ class CollectionWidget extends \OOUI\Widget {
 		// Mixins
 		$this->mixin( new \OOUI\GroupElement( $this, array_merge( $config, array( 'group' => $groupDiv ) ) ) );
 
+		// ID LINK
+		if ( $this->showCollectionLink ) {
+			// TODO: Do this whole base_url thing better. This is bad and messy.
+			$linkButton = new \OOUI\ButtonWidget( array(
+				'href' => BASE_URL . '?cid=' . $model->getId(),
+				'label' => $this->linkPretext,
+				'classes' => array( 'converse-ui-collectionWidget-linkButton' ),
+				'framed' => false,
+				'icon' => 'window',
+				'flags' => array( 'progressive' )
+			) );
+			$this->appendContent( $linkButton );
+		}
+
 		// Title post widget
 		if ( $model->getTitlePost() !== null ) {
 			$headerDiv = new \OOUI\Tag();
@@ -36,18 +50,6 @@ class CollectionWidget extends \OOUI\Widget {
 
 			$headerDiv->appendContent( $titleWidget );
 			$this->appendContent( $headerDiv );
-		}
-
-		// ID LINK
-		if ( $this->showCollectionLink ) {
-			// TODO: Do this whole base_url thing better. This is bad and messy.
-			$idLink = new \OOUI\Tag( 'a' );
-			$idLink->setAttributes( array(
-				'href' => BASE_URL . '?cid=' . $model->getId()
-			) );
-			// TODO: Work with i18n messages, and make this extendible
-			$idLink->appendContent( $this->linkPretext );
-			$this->appendContent( $idLink );
 		}
 
 		// Summary post widget
@@ -63,8 +65,11 @@ class CollectionWidget extends \OOUI\Widget {
 			$primaryPostWidget->addClasses( array( 'converse-ui-collectionWidget-primary' ) );
 
 			// Ugly ugly ugly. This is just for test purposes, it really should be rewritten!
-			$timestamp = $model->getPrimaryPost()->getLatestRevision()->getTimestamp();
-			$this->appendContent( $primaryPostWidget, date( $this->dateFormat, $timestamp ) );
+			$timestampLabelWidget = new \OOUI\LabelWidget( array(
+				'label' => date( $this->dateFormat, $model->getPrimaryPost()->getLatestRevision()->getTimestamp() ),
+				'classes' => array( 'converse-ui-collectionWidget-timestamp' )
+			) );
+			$this->appendContent( $primaryPostWidget, $timestampLabelWidget );
 		}
 
 		// Recurse through children...

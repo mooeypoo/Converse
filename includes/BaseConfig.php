@@ -1,6 +1,10 @@
 <?php
 namespace Converse;
 
+/**
+ * Base configuration.
+ * To override configuration properties extend this class.
+ */
 class BaseConfig {
 	static function getMaxNesting() {
 		return 4;
