@@ -44,7 +44,7 @@ class ModeratedItem {
 	 * @return Array
 	 */
 	public function getApiProperties() {
-		return array(
+		$result = array(
 			'id' => $this->getId(),
 			'timestamp' => $this->getTimestamp(),
 			// Moderation stuff
@@ -53,12 +53,14 @@ class ModeratedItem {
 			'moderation_timestamp' => $this->getModerationTimestamp(),
 			'moderation_reason' => $this->getModerationReason()
 		);
+
+		return $this->cleanEmptyProperties( $result );
 	}
 
-	public static function cleanNullElements( $array ) {
+	public static function cleanEmptyProperties( $array ) {
 		$result = array();
 		foreach ( $array as $key => $value ) {
-			if ( $value !== null ) {
+			if ( $value !== null && $value !== '' ) {
 				$result[$key] = $value;
 			}
 		}

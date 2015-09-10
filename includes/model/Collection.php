@@ -33,7 +33,7 @@ class Collection extends ModeratedItem {
 			'context_collection_id' => $this->getContextCollection() ? $this->getContextCollection()->getId() : null,
 			'children' => $getAllChildren ? $this->getChildrenProperties() : null,
 		);
-		return parent::cleanNullElements( $result );
+		return parent::cleanEmptyProperties( $result );
 	}
 
 	public function getChildrenProperties() {

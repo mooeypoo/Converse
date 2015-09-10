@@ -17,11 +17,14 @@ class Post extends ModeratedItem {
 	 * @return Array
 	 */
 	public function getApiProperties() {
-		$result = parent::getApiProperties() + array(
-			'latest_revision' => $this->getLatestRevision() ? $this->getLatestRevision()->getApiProperties() : null,
-		);
+		// $result = parent::getApiProperties() + array(
+		// 	'latest_revision' => $this->getLatestRevision() ? $this->getLatestRevision()->getApiProperties() : null,
+		// );
 
-		return parent::cleanNullElements( $result );
+		$result = parent::getApiProperties() + (
+			$this->getLatestRevision() ? $this->getLatestRevision()->getApiProperties() : array()
+		);
+		return parent::cleanEmptyProperties( $result );
 	}
 
 	public function getLatestRevisionId() {

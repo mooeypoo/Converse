@@ -12,7 +12,7 @@ class Revision extends ModeratedItem {
 
 	public function __construct( $id, $data = array() ) {
 		parent::__construct( $id, $data );
-
+var_dump( $data );
 		// Set optional data items
 		if ( isset( $data[ 'author' ] ) ) {
 			$this->setAuthor( $data[ 'author' ] );
@@ -26,33 +26,46 @@ class Revision extends ModeratedItem {
 		if ( isset( $data[ 'content_format' ] ) ) {
 			$this->setContentFormat( $data[ 'content_format' ] );
 		}
+		if ( isset( $data[ 'parent_post' ] ) ) {
+			$this->setParentPostId( $data[ 'parent_post' ] );
+		}
 	}
 
 	/**
 	 * Get a full array of field/values fit for the database
 	 * @return Array
 	 */
-	public function getAllProperties() {
-		$result = parent::getAllProperties() + array(
+	public function getApiProperties() {
+		$result = parent::getApiProperties() + array(
 			'author' => $this->getAuthor() ? $this->getAuthor()->getId() : null,
 			'previous_revision_id' => $this->getPreviousRevision() ? $this->getPreviousRevision()->getId() : null,
-			'parent_post_id' => $this->getParentPost() ? $this->getParentPost()->getId() : null,
+			'parent_post_id' => $this->getParentPostId(),
 			'content' => $this->getContent(),
 			'content_format' => $this->getContentFormat(),
 			'edit_comment' => $this->getEditComment(),
 		);
 
-		return parent::cleanNullElements( $result );
+		return parent::cleanEmptyProperties( $result );
 	}
 
 	/** Setters and getters */
 
 	public function setParentPost( $id ) {
 		$this->parentPost = $id;
+		// Change id
+		$this->setParentPostId( $this->parentPost->getId() );
 	}
 
 	public function getParentPost() {
 		return $this->parentPost;
+	}
+
+	public function getParentPostId() {
+		return $this->parentPostId;
+	}
+
+	public function setParentPostId( $id ) {
+		$this->parentPostId = $id;
 	}
 
 	public function setAuthor( $author ) {

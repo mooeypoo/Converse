@@ -7,41 +7,23 @@ require_once( 'bootstrap.php' );
 
 // Silex application
 $app = new Silex\Application();
+$api = new Converse\API();
 
-
-$app->get( '/collection/{id}', function ( Silex\Application $app, $id ) {
-	// Converse model builder
-	$builder = new Converse\Model\ModelBuilder();
-	// Build the collection
-	$collection = $builder->buildCollectionHierarchy( $id, false );
-
-	// Get the properties
-	return json_encode( $collection->getApiProperties() );
+$app->get( '/collection/{id}', function ( Silex\Application $app, $id ) use ($api) {
+	return $api->getCollectionHierarchy( $id, null );
 } );
 
-$app->get( '/collection/{id}/full', function ( Silex\Application $app, $id ) {
-	// Converse model builder
-	$builder = new Converse\Model\ModelBuilder();
-	$builder->setIgnoreMaxNesting( true );
-
-	// Build the collection
-	$collection = $builder->buildCollectionHierarchy( $id );
-
-	// Get the properties
-	return json_encode( $collection->getApiProperties( true ) );
+$app->get( '/collection/{id}/deep', function ( Silex\Application $app, $id ) use ($api) {
+	return $api->getCollectionHierarchy( $id, true );
 } );
 
 
-$app->get( '/collection/{id}/full/{nesting}', function ( Silex\Application $app, $id, $nesting ) {
-	// Converse model builder
-	$builder = new Converse\Model\ModelBuilder();
-	$builder->setOverrideMaxNesting( $nesting );
+$app->get( '/collection/{id}/deep/{nesting}', function ( Silex\Application $app, $id, $nesting ) use ($api) {
+	return $api->getCollectionHierarchy( $id, $nesting );
+} );
 
-	// Build the collection
-	$collection = $builder->buildCollectionHierarchy( $id );
-
-	// Get the properties
-	return json_encode( $collection->getApiProperties( true ) );
+$app->get( '/revision/{id}', function ( Silex\Application $app, $id ) use ($api) {
+	return $api->getRevision( $id );
 } );
 
 

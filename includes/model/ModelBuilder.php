@@ -22,7 +22,14 @@ class ModelBuilder {
 		$connectionParams = \Converse\Config::getDatabaseDetails();
 
 		$this->dbhelper = new \Converse\DB\DBHelper( $connectionParams );
+		$this->reset();
+	}
+
+	public function reset() {
+		$this->ignoreMaxNesting = false;
 		$this->maxNestingLevel = \Converse\Config::getMaxNesting();
+		$this->overrideMaxNesting = 0;
+		$this->nestingChildren = array();
 	}
 
 	public function setIgnoreMaxNesting( $isIgnore ) {
@@ -31,6 +38,12 @@ class ModelBuilder {
 
 	public function setOverrideMaxNesting( $newMax ) {
 		$this->maxNestingLevel = $newMax;
+	}
+
+	public function getRevision( $revId ) {
+		$revisionData =  $this->dbhelper->getRevision( $revId );
+		$revision = new Revision( $revisionData[ 'id' ], $revisionData );
+		return $revision;
 	}
 
 	/**
