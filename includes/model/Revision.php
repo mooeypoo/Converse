@@ -12,7 +12,7 @@ class Revision extends ModeratedItem {
 
 	public function __construct( $id, $data = array() ) {
 		parent::__construct( $id, $data );
-var_dump( $data );
+// var_dump( $data );
 		// Set optional data items
 		if ( isset( $data[ 'author' ] ) ) {
 			$this->setAuthor( $data[ 'author' ] );
@@ -35,7 +35,7 @@ var_dump( $data );
 	 * Get a full array of field/values fit for the database
 	 * @return Array
 	 */
-	public function getApiProperties() {
+	public function getApiProperties( $getAllChildren = false ) {
 		$result = parent::getApiProperties() + array(
 			'author' => $this->getAuthor() ? $this->getAuthor()->getId() : null,
 			'previous_revision_id' => $this->getPreviousRevision() ? $this->getPreviousRevision()->getId() : null,

@@ -43,7 +43,7 @@ class ModeratedItem {
 	 * Get a full array of field/values fit for the database
 	 * @return Array
 	 */
-	public function getApiProperties() {
+	public function getApiProperties( $getAllChildren = false ) {
 		$result = array(
 			'id' => $this->getId(),
 			'timestamp' => $this->getTimestamp(),

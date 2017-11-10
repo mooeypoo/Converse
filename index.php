@@ -2,11 +2,11 @@
 require_once( 'bootstrap.php' );
 
 // OOUI
-OOUI\Theme::setSingleton( new OOUI\MediaWikiTheme() );
+OOUI\Theme::setSingleton( new OOUI\WikimediaUITheme() );
 OOUI\Element::setDefaultDir( 'ltr' );
 $styles = array(
-	'includes/styles/ooui/oojs-ui-mediawiki.css',
-	'includes/styles/ooui/oojs-ui-mediawiki-icons-content.min.css',
+	'includes/styles/ooui/oojs-ui-wikimediaui.css',
+	'includes/styles/ooui/oojs-ui-wikimediaui-icons-content.min.css',
 	'includes/styles/Converse.css'
 );
 

@@ -16,12 +16,12 @@ class Post extends ModeratedItem {
 	 * Get a full array of field/values fit for the database
 	 * @return Array
 	 */
-	public function getApiProperties() {
+	public function getApiProperties( $getAllChildren = false ) {
 		// $result = parent::getApiProperties() + array(
 		// 	'latest_revision' => $this->getLatestRevision() ? $this->getLatestRevision()->getApiProperties() : null,
 		// );
 
-		$result = parent::getApiProperties() + (
+		$result = parent::getApiProperties( $getAllChildren ) + (
 			$this->getLatestRevision() ? $this->getLatestRevision()->getApiProperties() : array()
 		);
 		return parent::cleanEmptyProperties( $result );

@@ -18,6 +18,18 @@ level of the display.
 * A top layer of Javascript should add interactive operations.
 * The system should supply an accessible API for the operations against the database.
 
+## Installation
+(This is an experimental software that does not work properly, please be advised)
+
+* Clone the repo
+* Run `composer install`
+* Run `npm install`
+* Create a database and import `database.sql`
+* Rename `includes/config.php.sample` to `includes/Config.php`
+* Edit the new `includes/Config.php` with your database settings
+* run
+See `index.php` commented-out section "/* Example DB operation */" for examples on creating and managing boards, topics and replies.
+
 ## Software Status
 This is a side project I'm working on to re-develop my php skills. As such, there are a few things to note:
 * The software is not ready for use! It is still being developed, and is extremely unstable. Please beware and don't put this code anywhere close to production servers or anywhere that actually matters until it's stable.

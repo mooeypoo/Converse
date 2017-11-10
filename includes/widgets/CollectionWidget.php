@@ -3,6 +3,8 @@
 namespace Converse\UI;
 
 class CollectionWidget extends \OOUI\Widget {
+	use \OOUI\GroupElement;
+
 	protected $linkPretext = 'Show';
 	protected $showCollectionLink = true;
 	protected $dateFormat = '';
@@ -24,7 +26,7 @@ class CollectionWidget extends \OOUI\Widget {
 		$groupDiv->addClasses( array( 'converse-ui-collection-group' ) );
 
 		// Mixins
-		$this->mixin( new \OOUI\GroupElement( $this, array_merge( $config, array( 'group' => $groupDiv ) ) ) );
+		$this->initializeGroupElement( array_merge( $config, array( 'group' => $groupDiv ) ) );
 
 		// ID LINK
 		if ( $this->showCollectionLink ) {

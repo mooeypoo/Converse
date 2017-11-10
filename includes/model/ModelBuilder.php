@@ -22,6 +22,7 @@ class ModelBuilder {
 		$connectionParams = \Converse\Config::getDatabaseDetails();
 
 		$this->dbhelper = new \Converse\DB\DBHelper( $connectionParams );
+		$this->hooks = new \Converse\Hooks();
 		$this->reset();
 	}
 
@@ -62,7 +63,7 @@ class ModelBuilder {
 		$collection = $this->populateCollection( $collectionId );
 
 		// Hook
-		\Converse\Hooks::run( 'afterBuildCollection' );
+		$this->hooks->run( 'afterBuildCollection' );
 
 		return $collection;
 	}

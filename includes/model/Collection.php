@@ -24,7 +24,7 @@ class Collection extends ModeratedItem {
 	 *
 	 * @return Array
 	 */
-	public function getApiProperties( $getAllChildren ) {
+	public function getApiProperties( $getAllChildren = false ) {
 		$result = parent::getApiProperties() + array(
 			'author' => $this->getAuthor(),
 			'title_post' => $this->getTitlePost() ? $this->getTitlePost()->getApiProperties() : null,
